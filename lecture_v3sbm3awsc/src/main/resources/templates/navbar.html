@@ -1,0 +1,44 @@
+<div th:fragment="navbarFragment">
+    <div class="top_menu">
+
+      <div class="top_menu_icon"></div> <!-- 아이콘을 표시할 빈 div 추가 -->
+      <div class="top_menu_label">베이스 기타 ver 2.0</div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container-fluid">
+        <div style="float:left; width: 20%"> 
+            <a class="navbar-brand" href="/"> 
+                <img src="/images/menu_icon2.png" class="img-fluid rounded" style="width: 15%";>
+                My Bass
+            </a>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarSupportedContent" aria-expanded="false" 
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- 메뉴 시작 -->
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown" th:each="categoVOMenu:${menu}">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" 
+                        data-bs-toggle="dropdown" aria-expanded="false" th:text="${categoVOMenu.name}">
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li th:each="categoVO:${categoVOMenu.list_namesub}">
+                            <a class="dropdown-item" href="#" th:text="${categoVO.namesub}"></a>
+                        </li>
+                    </ul>
+                </li>
+    
+                <li class="nav-item">
+                    <a class="nav-link" href="/catego/list_search?now_page=1">카테고리 전체 목록</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- 메뉴 종료 -->
+        </div>
+    </nav>
+</div>

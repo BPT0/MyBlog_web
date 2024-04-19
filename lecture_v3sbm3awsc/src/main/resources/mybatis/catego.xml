@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.mvc.catego.CategoDAOInter"> <!-- SpringBoot가 자동으로 구현하여 연동하-->
+  <!-- SQL: Create-> CategoVO -> ArrayList<CategoVO> return-->
+  <insert id="create" parameterType="dev.mvc.catego.CategoVO"> 
+    INSERT INTO catego(categono, name, namesub, count, pdate, seqcno, vis)
+    VALUES(CATEGO_SEQ.nextval, #{name}, #{namesub}, 0, sysdate, #{seqcno}, 'Y')
+  </insert>
+  
+  <!-- SQL: read(list)-> CategoVO -> ArrayList<CategoVO> return -->
+  <select id="list_all" resultType="dev.mvc.catego.CategoVO">
+    SELECT categono, name, namesub, count, pdate, seqcno, vis
+    FROM catego
+    ORDER BY seqcno ASC
+  </select>
+
+  <!-- 회원/비회원에게 공개할 중분류 목록: SQL -> ArrayList<CateVO> return -->
+  <select id="list_all_name_y" resultType="dev.mvc.catego.CategoVO">
+    SELECT categono, name, seqcno, vis
+    FROM catego
+    WHERE name IN(
+        SELECT DISTINCT name
+        FROM catego
+    ) AND namesub = '-' AND vis='Y'
+    ORDER BY seqcno ASC
+  </select>
+    
+  <!-- 회원/비회원에게 공개할 소분류 목록: SQL -> ArrayList<CateVO> return -->
+  <select id="list_all_namesub_y" resultType="dev.mvc.catego.CategoVO" parameterType="String">
+    SELECT categono, name, namesub, count, pdate, seqcno, vis  
+    FROM catego
+    WHERE name = #{name} AND namesub != '-' AND vis='Y'
+    ORDER BY seqcno ASC
+  </select>
+  
+  <!-- 관리자용 검색 목록, Map은 VO class보다 적은 변수의 전달시 사용: SQL -> ArrayList<CateVO> return -->
+  <select id="list_search" resultType="dev.mvc.catego.CategoVO" parameterType="String">
+    SELECT categono, name, namesub, count, pdate, seqcno, vis  
+    FROM catego
+    <if test="word != null and word != ''">
+      WHERE UPPER(name) LIKE '%' || UPPER(#{word}) || '%' OR UPPER(namesub) LIKE '%' || UPPER(#{word}) || '%'  
+    </if>
+    ORDER BY seqcno ASC
+  </select>
+
+  <!-- SQL: read-> CategoVO return -->
+  <select id="read" resultType="dev.mvc.catego.CategoVO" parameterType="int">
+    SELECT categono, name, namesub, count, pdate, seqcno, vis
+    FROM catego
+    WHERE categono = #{categono}
+  </select>
+
+  <!-- SQL: insert -> return: 수정한 레코드 갯수, parameterType: 수정할 레코드 정보 -->
+  <update id="update" parameterType="dev.mvc.catego.CategoVO">
+    UPDATE catego SET name=#{name}, namesub=#{namesub}, count=#{count}, pdate = sysdate, seqcno=#{seqcno}, vis=#{vis}
+    WHERE categono = #{categono}
+  </update>
+
+  <!-- 수정: 출력 순서 높임: seqcno - 1, 우선순위 높임 SQL -->
+  <update id="update_seqcno_forward" parameterType="Integer">
+    UPDATE catego SET seqcno = seqcno - 1 WHERE categono = #{categono}
+  </update>
+  
+  <!-- 수정: 출력 순서 낮춤: seqcno +1, 우선순위 낮춤 SQL -->
+  <update id="update_seqcno_backward" parameterType="Integer">
+    UPDATE catego SET seqcno = seqcno + 1 WHERE categono = #{categono}
+  </update>
+
+  <!-- 수정: 카테고리 공개 설정 -->
+  <update id="update_vis_y" parameterType="Integer">
+    UPDATE catego SET vis='Y' WHERE categono = #{categono}
+  </update>
+  
+  <!-- 수정: 카테고리 비공개 설정 -->
+  <update id="update_vis_n" parameterType="Integer">
+    UPDATE catego SET vis='N' WHERE categono = #{categono}
+  </update>
+
+  <!-- 삭제 SQL: delete -> return: 삭제한 레코드 갯수-->
+  <delete id="delete" parameterType="Integer">
+    DELETE FROM catego 
+    WHERE categono = #{categono}
+  </delete>
+
+  <!-- 검색 목록 페이징 : SQL -> ArrayList<CateVO> return -->
+  <select id="list_search_paging" resultType="dev.mvc.catego.CategoVO" parameterType="Map">
+    SELECT categono, name, namesub, count, pdate, seqcno, vis, r
+  FROM(
+    SELECT categono, name, namesub, count, pdate, seqcno, vis, rownum as r
+    FROM(
+        SELECT categono, name, namesub, count, pdate, seqcno, vis  
+        FROM catego
+        <if test="word != null and word != ''">
+          WHERE UPPER(name) LIKE '%' || UPPER(#{word}) || '%' OR UPPER(namesub) LIKE '%' || UPPER(#{word}) || '%'  
+        </if>
+        ORDER BY seqcno ASC
+    )
+  ) WHERE r &gt;= #{start_num} AND r &lt;= #{end_num}
+  </select>
+
+  <!-- 검색된 레코드 수: SQL -> ArrayList<CateVO> return -->
+  <select id="list_search_count" resultType="int" parameterType="String">
+    SELECT COUNT(*) as cnt
+    FROM catego
+    <if test="word != null and word != ''">
+      WHERE UPPER(name) LIKE '%' || UPPER(#{word}) || '%' OR UPPER(namesub) LIKE '%' || UPPER(#{word}) || '%'  
+    </if>
+    ORDER BY seqcno ASC
+  </select>
+    
+</mapper>

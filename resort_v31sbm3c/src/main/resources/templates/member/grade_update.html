@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html layout:decorate="~{layout}"> <!-- layout.html 상속-->
+
+<div layout:fragment="content">
+  <script>
+    window.onload = () => {
+      
+      document.querySelector('#grade').addEventListener('keypress', (event) => {
+      // document.getElementById('passwd').addEventListener('keypress', (event) => {
+        if(event.key === 'Enter') {
+          document.getElementById('btn_send').focus();
+        }
+      }); 
+      
+    }
+    
+    function send() { // grade 변경 처리
+      let grade = document.getElementById('grade');
+      let grade_msg = document.getElementById('grade_msg');
+  
+      if (grade.value.trim().length == 0) {
+        grade_msg.innerHTML= 'grade는 필수 입력 사항입니다.';
+        grade_msg.classList.add('span_warning');    // class 적용
+        grade.focus();
+  
+        return false;  // grade 변경 중지
+        
+      }
+  
+      document.getElementById('frm').submit(); 
+    }  
+      
+  </script>
+
+  <div class="title_line">등급 변경(*: 필수)</div>
+  <aside class="aside_right">
+    <a href="javascript:location.reload();">새로고침</a>
+    <span class='menu_divide' >│</span> 
+    <a href='./create'>회원 가입</a>
+    <span class='menu_divide' >│</span> 
+    <a href='./list'>목록</a>
+  </aside> 
+
+  <div class='menu_line'></div>
+  
+  <div style="width: 60%; margin: 0px auto ">
+    <form name="frm" id="frm" th:object="${memberVO}" method="post" action="/member/grade_update_proc">
+      <input type='hidden' name="memberno" id="memberno" th:value='${memberVO.memberno}'>
+      
+      <div class="form-group">
+        <label for="grade">등급*</label>
+        <input type='number' name='grade' id='grade' th:value='${memberVO.grade}' required="required" autofocus
+                  placeholder="등급" class="form-control form-control-sm" style="width: 30%;">
+        예) 1
+        <span id="grade_msg"></span>
+      </div>
+
+      <div class="content_body_bottom">
+        <button type="button" onclick="send();" class="btn btn-secondary btn-sm">등급 변경</button>
+        <button type="button" onclick="history.back();" class="btn btn-secondary btn-sm">취소</button>
+      </div>
+
+    </form>
+  </div>
+    
+</div>
+</html>
+

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}"> <!-- layout.html 상속-->
+    <div layout:fragment="content" style="width: 100%; margin:10px auto; text-align:right">
+        <div style="width: 20%; float: left; text-align:left;" >
+            <ul style="list-style-type: none; padding-left:0;">
+                
+                <li class="item">
+                    <a href="#">
+                        <img src="/images/menu_icon.png" class="img-fluid rounded" 
+                        alt="소모품 이동 아이콘" style="width: 40%;">
+                        <span style="font-size: 15px;">소모품</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="#">
+                        <img src="/images/menu_icon2.png" class="img-fluid rounded" 
+                        alt="강의 이동 아이콘" style="width: 40%;">
+                        <span>강의</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="#">
+                        <img src="/images/menu_icon3.png" class="img-fluid rounded" 
+                        alt="강의 이동 아이콘" style="width: 40%;">
+                        <span>롤모델</span>
+                    </a>
+                </li>
+        </div>
+    
+    <div style="width: 35%; float:left">
+      <div style=" text-align: center;">
+        <span style="font-size: 15px; text-align: center;">베이스 사진</span>
+      </div>
+      <div class="fotorama"
+               data-autoplay="5000"
+               data-nav="thumbs"
+               data-ratio="800/520">
+          <img src="/fotorama/images/main_slide_bass_01.jpg"> <!-- static 폴더 기준 -->     
+          <img src="/fotorama/images/main_slide_bass_02.jpg">
+          <img src="/fotorama/images/main_slide_bass_03.jpg">              
+          <img src="/fotorama/images/main_slide_bass_04.jpg">              
+          <img src="/fotorama/images/main_slide_bass_05.jpg">              
+          <img src="/fotorama/images/main_slide_bass_06.jpg">              
+        </div>
+    </div>
+        
+        
+        <div class="fotorama"
+               data-autoplay="5000"
+               data-nav="thumbs"
+               data-ratio="800/520"
+               style="width: 35%; float:left; margin-left: 15px;">
+          <img src="/fotorama/images/main_slide_bass_01.jpg"> <!-- static 폴더 기준 -->     
+          <img src="/fotorama/images/main_slide_bass_02.jpg">
+          <img src="/fotorama/images/main_slide_bass_03.jpg">              
+          <img src="/fotorama/images/main_slide_bass_04.jpg">              
+          <img src="/fotorama/images/main_slide_bass_05.jpg">              
+          <img src="/fotorama/images/main_slide_bass_06.jpg">              
+        </div>
+                
+    </div>
+</html>
